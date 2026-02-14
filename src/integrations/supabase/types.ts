@@ -14,54 +14,296 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_actions: {
+        Row: {
+          action_type: string
+          admin_id: string
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          reason: string | null
+          target_id: string | null
+          target_type: string
+        }
+        Insert: {
+          action_type: string
+          admin_id: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          reason?: string | null
+          target_id?: string | null
+          target_type: string
+        }
+        Update: {
+          action_type?: string
+          admin_id?: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          reason?: string | null
+          target_id?: string | null
+          target_type?: string
+        }
+        Relationships: []
+      }
+      announcements: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          message: string
+          title: string
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          message: string
+          title: string
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          message?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      app_settings: {
+        Row: {
+          id: string
+          key: string
+          updated_at: string | null
+          updated_by: string | null
+          value: Json | null
+        }
+        Insert: {
+          id?: string
+          key: string
+          updated_at?: string | null
+          updated_by?: string | null
+          value?: Json | null
+        }
+        Update: {
+          id?: string
+          key?: string
+          updated_at?: string | null
+          updated_by?: string | null
+          value?: Json | null
+        }
+        Relationships: []
+      }
+      audit_logs: {
+        Row: {
+          action: string
+          admin_email: string | null
+          admin_id: string
+          created_at: string | null
+          details: Json | null
+          entity_id: string | null
+          entity_type: string
+          id: string
+        }
+        Insert: {
+          action: string
+          admin_email?: string | null
+          admin_id: string
+          created_at?: string | null
+          details?: Json | null
+          entity_id?: string | null
+          entity_type: string
+          id?: string
+        }
+        Update: {
+          action?: string
+          admin_email?: string | null
+          admin_id?: string
+          created_at?: string | null
+          details?: Json | null
+          entity_id?: string | null
+          entity_type?: string
+          id?: string
+        }
+        Relationships: []
+      }
       companies: {
         Row: {
+          admin_notes: string | null
           approved_at: string | null
           approved_by: string | null
+          business_type: string | null
           contact_email: string | null
+          contact_person_id_type: string | null
+          contact_person_name: string | null
           contact_phone: string | null
           created_at: string | null
           created_by: string
+          date_of_incorporation: string | null
           description: string | null
+          director_id_types: string[] | null
+          director_names: string[] | null
           id: string
+          industry: string | null
           is_approved: boolean | null
+          is_suspended: boolean | null
           location: string | null
           logo_url: string | null
           name: string
+          operating_address: string | null
+          reason_for_joining: string | null
+          registration_number: string | null
+          tin_number: string | null
+          trust_level: string | null
           updated_at: string | null
+          verification_stage: string | null
           website: string | null
         }
         Insert: {
+          admin_notes?: string | null
           approved_at?: string | null
           approved_by?: string | null
+          business_type?: string | null
           contact_email?: string | null
+          contact_person_id_type?: string | null
+          contact_person_name?: string | null
           contact_phone?: string | null
           created_at?: string | null
           created_by: string
+          date_of_incorporation?: string | null
           description?: string | null
+          director_id_types?: string[] | null
+          director_names?: string[] | null
           id?: string
+          industry?: string | null
           is_approved?: boolean | null
+          is_suspended?: boolean | null
           location?: string | null
           logo_url?: string | null
           name: string
+          operating_address?: string | null
+          reason_for_joining?: string | null
+          registration_number?: string | null
+          tin_number?: string | null
+          trust_level?: string | null
           updated_at?: string | null
+          verification_stage?: string | null
           website?: string | null
         }
         Update: {
+          admin_notes?: string | null
           approved_at?: string | null
           approved_by?: string | null
+          business_type?: string | null
           contact_email?: string | null
+          contact_person_id_type?: string | null
+          contact_person_name?: string | null
           contact_phone?: string | null
           created_at?: string | null
           created_by?: string
+          date_of_incorporation?: string | null
           description?: string | null
+          director_id_types?: string[] | null
+          director_names?: string[] | null
           id?: string
+          industry?: string | null
           is_approved?: boolean | null
+          is_suspended?: boolean | null
           location?: string | null
           logo_url?: string | null
           name?: string
+          operating_address?: string | null
+          reason_for_joining?: string | null
+          registration_number?: string | null
+          tin_number?: string | null
+          trust_level?: string | null
           updated_at?: string | null
+          verification_stage?: string | null
           website?: string | null
+        }
+        Relationships: []
+      }
+      company_documents: {
+        Row: {
+          company_id: string
+          document_type: string
+          document_url: string
+          file_name: string | null
+          id: string
+          review_notes: string | null
+          review_status: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          uploaded_at: string | null
+          uploaded_by: string
+        }
+        Insert: {
+          company_id: string
+          document_type: string
+          document_url: string
+          file_name?: string | null
+          id?: string
+          review_notes?: string | null
+          review_status?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          uploaded_at?: string | null
+          uploaded_by: string
+        }
+        Update: {
+          company_id?: string
+          document_type?: string
+          document_url?: string
+          file_name?: string | null
+          id?: string
+          review_notes?: string | null
+          review_status?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          uploaded_at?: string | null
+          uploaded_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_documents_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feature_flags: {
+        Row: {
+          description: string | null
+          enabled: boolean | null
+          id: string
+          key: string
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          description?: string | null
+          enabled?: boolean | null
+          id?: string
+          key: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          description?: string | null
+          enabled?: boolean | null
+          id?: string
+          key?: string
+          updated_at?: string | null
+          updated_by?: string | null
         }
         Relationships: []
       }
@@ -323,9 +565,12 @@ export type Database = {
           avatar_url: string | null
           bio: string | null
           created_at: string | null
+          deleted_at: string | null
           email: string | null
           full_name: string
           id: string
+          is_deleted: boolean | null
+          is_suspended: boolean | null
           is_verified: boolean | null
           location: string | null
           phone: string | null
@@ -338,9 +583,12 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string | null
+          deleted_at?: string | null
           email?: string | null
           full_name?: string
           id?: string
+          is_deleted?: boolean | null
+          is_suspended?: boolean | null
           is_verified?: boolean | null
           location?: string | null
           phone?: string | null
@@ -353,9 +601,12 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string | null
+          deleted_at?: string | null
           email?: string | null
           full_name?: string
           id?: string
+          is_deleted?: boolean | null
+          is_suspended?: boolean | null
           is_verified?: boolean | null
           location?: string | null
           phone?: string | null
@@ -436,16 +687,22 @@ export type Database = {
       }
       user_roles: {
         Row: {
+          assigned_at: string | null
+          assigned_by: string | null
           id: string
           role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Insert: {
+          assigned_at?: string | null
+          assigned_by?: string | null
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Update: {
+          assigned_at?: string | null
+          assigned_by?: string | null
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
@@ -457,6 +714,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      ensure_super_admin_role: {
+        Args: { _user_id: string }
+        Returns: undefined
+      }
       get_user_role: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"]
@@ -470,7 +731,12 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "job_seeker" | "employer" | "freelancer" | "admin"
+      app_role:
+        | "job_seeker"
+        | "employer"
+        | "freelancer"
+        | "admin"
+        | "super_admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -598,7 +864,13 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["job_seeker", "employer", "freelancer", "admin"],
+      app_role: [
+        "job_seeker",
+        "employer",
+        "freelancer",
+        "admin",
+        "super_admin",
+      ],
     },
   },
 } as const

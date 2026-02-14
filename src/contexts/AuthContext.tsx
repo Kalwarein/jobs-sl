@@ -12,6 +12,8 @@ interface AuthContextType {
   profile: Profile | null;
   role: AppRole | null;
   loading: boolean;
+  isAdmin: boolean;
+  isSuperAdmin: boolean;
   signUp: (email: string, password: string, fullName: string) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
@@ -35,12 +37,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       .single();
     setProfile(profileData);
 
+    // Enforce super admin role on every login
+    await supabase.rpc('ensure_super_admin_role', { _user_id: userId });
+
     const { data: roleData } = await supabase
       .from('user_roles')
       .select('role')
-      .eq('user_id', userId)
-      .single();
-    setRole(roleData?.role ?? 'job_seeker');
+      .eq('user_id', userId);
+    
+    // Pick highest privilege role
+    const roles = roleData?.map(r => r.role) || [];
+    if (roles.includes('super_admin')) setRole('super_admin' as AppRole);
+    else if (roles.includes('admin')) setRole('admin');
+    else if (roles.includes('employer')) setRole('employer');
+    else if (roles.includes('freelancer')) setRole('freelancer');
+    else setRole('job_seeker');
   };
 
   useEffect(() => {
@@ -99,8 +110,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (user) await fetchProfile(user.id);
   };
 
+  const isAdmin = role === 'admin' || role === 'super_admin';
+  const isSuperAdmin = role === 'super_admin';
+
   return (
-    <AuthContext.Provider value={{ user, session, profile, role, loading, signUp, signIn, signOut, refreshProfile }}>
+    <AuthContext.Provider value={{ user, session, profile, role, loading, isAdmin, isSuperAdmin, signUp, signIn, signOut, refreshProfile }}>
       {children}
     </AuthContext.Provider>
   );

@@ -4,11 +4,11 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import {
-  User, FileText, Shield, Bell, LogOut, ChevronRight, Building2, Edit3, BadgeCheck, Briefcase
+  User, FileText, Shield, Bell, LogOut, ChevronRight, Building2, Edit3, BadgeCheck, Briefcase, LayoutDashboard
 } from 'lucide-react';
 
 const ProfilePage = () => {
-  const { profile, role, signOut } = useAuth();
+  const { profile, role, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -20,7 +20,8 @@ const ProfilePage = () => {
     { icon: Edit3, label: 'Edit Profile', desc: 'Update your information', action: () => {} },
     { icon: FileText, label: 'My CV', desc: 'Manage your documents', action: () => {} },
     { icon: Building2, label: 'Apply as Company', desc: 'Become an employer', action: () => navigate('/company/register') },
-    { icon: Briefcase, label: 'Post a Job', desc: 'Post jobs for your company', action: () => navigate('/post-job'), show: role === 'employer' || role === 'admin' },
+    { icon: Briefcase, label: 'Post a Job', desc: 'Post jobs for your company', action: () => navigate('/post-job'), show: role === 'employer' || isAdmin },
+    { icon: LayoutDashboard, label: 'Admin Dashboard', desc: 'Manage the platform', action: () => navigate('/admin'), show: isAdmin },
     { icon: Bell, label: 'Notifications', desc: 'Manage alerts', action: () => {} },
     { icon: Shield, label: 'Security', desc: 'Password & privacy', action: () => {} },
   ].filter((item) => item.show !== false);
