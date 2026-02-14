@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search, Bell } from 'lucide-react';
+import { Search, Bell, Shield } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import JobCard from '@/components/JobCard';
@@ -9,13 +9,15 @@ import { supabase } from '@/integrations/supabase/client';
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const { profile } = useAuth();
+  const { profile, isAdmin } = useAuth();
   const [categories, setCategories] = useState<any[]>([]);
   const [featuredJobs, setFeaturedJobs] = useState<any[]>([]);
+  const [announcements, setAnnouncements] = useState<any[]>([]);
 
   useEffect(() => {
     supabase.from('job_categories').select('*').then(({ data }) => setCategories(data || []));
     supabase.from('jobs').select('*, companies(name, is_approved)').eq('is_approved', true).limit(5).then(({ data }) => setFeaturedJobs(data || []));
+    supabase.from('announcements').select('*').eq('is_active', true).order('created_at', { ascending: false }).limit(3).then(({ data }) => setAnnouncements(data || []));
   }, []);
 
   const firstName = profile?.full_name?.split(' ')[0] || 'there';
@@ -29,9 +31,16 @@ const HomePage = () => {
             <p className="text-primary-foreground/70 text-body">Good morning 👋</p>
             <h1 className="text-title text-primary-foreground">{firstName}</h1>
           </div>
-          <button className="relative p-2 rounded-full bg-primary-foreground/10">
-            <Bell className="h-6 w-6 text-primary-foreground" />
-          </button>
+          <div className="flex items-center gap-2">
+            {isAdmin && (
+              <button onClick={() => navigate('/admin')} className="p-2 rounded-full bg-primary-foreground/10">
+                <Shield className="h-6 w-6 text-primary-foreground" />
+              </button>
+            )}
+            <button className="relative p-2 rounded-full bg-primary-foreground/10">
+              <Bell className="h-6 w-6 text-primary-foreground" />
+            </button>
+          </div>
         </div>
         <div className="relative">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
@@ -40,13 +49,22 @@ const HomePage = () => {
       </div>
 
       <div className="px-4 -mt-1">
-        {/* Announcement */}
-        <div className="mt-5 rounded-xl bg-accent p-4 border border-primary/10">
-          <p className="text-caption font-semibold text-accent-foreground">📢 Announcement</p>
-          <p className="text-body text-muted-foreground mt-1">
-            Government Youth Employment Programme now accepting applications. Apply before March 2026!
-          </p>
-        </div>
+        {/* Announcements */}
+        {announcements.length > 0 ? (
+          announcements.map(a => (
+            <div key={a.id} className="mt-5 rounded-xl bg-accent p-4 border border-primary/10">
+              <p className="text-caption font-semibold text-accent-foreground">📢 {a.title}</p>
+              <p className="text-body text-muted-foreground mt-1">{a.message}</p>
+            </div>
+          ))
+        ) : (
+          <div className="mt-5 rounded-xl bg-accent p-4 border border-primary/10">
+            <p className="text-caption font-semibold text-accent-foreground">📢 Welcome to Job Giver SL</p>
+            <p className="text-body text-muted-foreground mt-1">
+              Find the best jobs in Sierra Leone. Start browsing!
+            </p>
+          </div>
+        )}
 
         {/* Categories */}
         <div className="mt-6">
