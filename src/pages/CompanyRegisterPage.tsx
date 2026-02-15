@@ -39,34 +39,58 @@ const CompanyRegisterPage = () => {
     if (!user) { navigate('/login'); return; }
     setSubmitting(true);
 
-    // Upsert employer role
-    await supabase.from('user_roles').upsert(
-      { user_id: user.id, role: 'employer' as any },
-      { onConflict: 'user_id,role' }
-    );
+    // Check if there's an existing rejected company to update
+    const { data: existing } = await supabase.from('companies')
+      .select('id')
+      .eq('created_by', user.id)
+      .not('rejection_reason', 'is', null)
+      .maybeSingle();
 
-    const { error } = await supabase.from('companies').insert({
-      name: form.name.trim(),
-      description: form.description.trim(),
-      contact_email: form.contact_email.trim(),
-      contact_phone: form.contact_phone.trim(),
-      website: form.website.trim(),
-      location: form.location.trim(),
-      business_type: form.business_type.trim(),
-      industry: form.industry,
-      contact_person_name: form.contact_person_name.trim(),
-      contact_person_id_type: form.contact_person_id_type,
-      reason_for_joining: form.reason_for_joining.trim(),
-      created_by: user.id,
-      verification_stage: 'stage_1',
-    });
+    let error;
+    if (existing) {
+      // Update the rejected company
+      const { error: updateErr } = await supabase.from('companies').update({
+        name: form.name.trim(),
+        description: form.description.trim(),
+        contact_email: form.contact_email.trim(),
+        contact_phone: form.contact_phone.trim(),
+        website: form.website.trim(),
+        location: form.location.trim(),
+        business_type: form.business_type.trim(),
+        industry: form.industry,
+        contact_person_name: form.contact_person_name.trim(),
+        contact_person_id_type: form.contact_person_id_type,
+        reason_for_joining: form.reason_for_joining.trim(),
+        rejection_reason: null,
+        verification_stage: 'stage_1',
+        is_approved: false,
+      }).eq('id', existing.id);
+      error = updateErr;
+    } else {
+      const { error: insertErr } = await supabase.from('companies').insert({
+        name: form.name.trim(),
+        description: form.description.trim(),
+        contact_email: form.contact_email.trim(),
+        contact_phone: form.contact_phone.trim(),
+        website: form.website.trim(),
+        location: form.location.trim(),
+        business_type: form.business_type.trim(),
+        industry: form.industry,
+        contact_person_name: form.contact_person_name.trim(),
+        contact_person_id_type: form.contact_person_id_type,
+        reason_for_joining: form.reason_for_joining.trim(),
+        created_by: user.id,
+        verification_stage: 'stage_1',
+      });
+      error = insertErr;
+    }
 
     setSubmitting(false);
     if (error) {
       toast({ title: 'Error', description: error.message, variant: 'destructive' });
     } else {
       await refreshProfile();
-      toast({ title: 'Application submitted!', description: 'Your company is pending admin review. You\'ll be notified once approved.' });
+      toast({ title: 'Application submitted!', description: 'Your company is pending admin review.' });
       navigate('/profile');
     }
   };

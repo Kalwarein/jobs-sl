@@ -1,14 +1,16 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useCompanyState } from '@/hooks/useCompanyState';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import {
-  User, FileText, Shield, Bell, LogOut, ChevronRight, Building2, Edit3, BadgeCheck, Briefcase, LayoutDashboard
+  User, FileText, Shield, Bell, LogOut, ChevronRight, Building2, Edit3, BadgeCheck, Briefcase, LayoutDashboard, Clock, XCircle, RefreshCw
 } from 'lucide-react';
 
 const ProfilePage = () => {
   const { profile, role, isAdmin, signOut } = useAuth();
+  const { buttonState, company, loading: companyLoading } = useCompanyState();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -16,11 +18,53 @@ const ProfilePage = () => {
     navigate('/login');
   };
 
+  const companyButton = () => {
+    switch (buttonState) {
+      case 'pending':
+        return {
+          icon: Clock,
+          label: 'Pending Approval',
+          desc: 'Your company application is under review',
+          action: () => {},
+          disabled: true,
+          className: 'opacity-60',
+        };
+      case 'rejected':
+        return {
+          icon: RefreshCw,
+          label: 'Reapply as Company',
+          desc: company?.rejection_reason || 'Your application was not approved',
+          action: () => navigate('/company/register'),
+          disabled: false,
+          className: 'border-l-4 border-l-destructive',
+        };
+      case 'dashboard':
+        return {
+          icon: Building2,
+          label: 'Company Dashboard',
+          desc: company?.name || 'Manage your company',
+          action: () => navigate('/company/dashboard'),
+          disabled: false,
+          className: 'border-l-4 border-l-primary',
+        };
+      default:
+        return {
+          icon: Building2,
+          label: 'Apply as Company',
+          desc: 'Become an employer',
+          action: () => navigate('/company/register'),
+          disabled: false,
+          className: '',
+        };
+    }
+  };
+
+  const cb = companyButton();
+
   const menuItems = [
     { icon: Edit3, label: 'Edit Profile', desc: 'Update your information', action: () => {} },
     { icon: FileText, label: 'My CV', desc: 'Manage your documents', action: () => {} },
-    { icon: Building2, label: 'Apply as Company', desc: 'Become an employer', action: () => navigate('/company/register') },
-    { icon: Briefcase, label: 'Post a Job', desc: 'Post jobs for your company', action: () => navigate('/post-job'), show: role === 'employer' || isAdmin },
+    { icon: cb.icon, label: cb.label, desc: cb.desc, action: cb.action, disabled: cb.disabled, className: cb.className },
     { icon: LayoutDashboard, label: 'Admin Dashboard', desc: 'Manage the platform', action: () => navigate('/admin'), show: isAdmin },
     { icon: Bell, label: 'Notifications', desc: 'Manage alerts', action: () => {} },
     { icon: Shield, label: 'Security', desc: 'Password & privacy', action: () => {} },
@@ -70,7 +114,12 @@ const ProfilePage = () => {
 
         <div className="mt-6 space-y-1">
           {menuItems.map((item) => (
-            <button key={item.label} onClick={item.action} className="w-full flex items-center gap-3 p-3.5 rounded-xl hover:bg-muted transition-colors">
+            <button
+              key={item.label}
+              onClick={item.action}
+              disabled={item.disabled}
+              className={`w-full flex items-center gap-3 p-3.5 rounded-xl hover:bg-muted transition-colors ${item.disabled ? 'cursor-not-allowed' : ''} ${item.className || ''}`}
+            >
               <div className="h-10 w-10 rounded-xl bg-accent flex items-center justify-center shrink-0">
                 <item.icon className="h-5 w-5 text-accent-foreground" />
               </div>
@@ -78,7 +127,7 @@ const ProfilePage = () => {
                 <p className="text-body font-medium">{item.label}</p>
                 <p className="text-tiny text-muted-foreground">{item.desc}</p>
               </div>
-              <ChevronRight className="h-5 w-5 text-muted-foreground shrink-0" />
+              {!item.disabled && <ChevronRight className="h-5 w-5 text-muted-foreground shrink-0" />}
             </button>
           ))}
         </div>
