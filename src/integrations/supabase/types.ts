@@ -147,24 +147,31 @@ export type Database = {
           created_at: string | null
           created_by: string
           date_of_incorporation: string | null
+          default_contact_email: string | null
           description: string | null
           director_id_types: string[] | null
           director_names: string[] | null
+          hiring_banner_url: string | null
           id: string
           industry: string | null
           is_approved: boolean | null
           is_suspended: boolean | null
+          is_visible: boolean | null
           location: string | null
           logo_url: string | null
           name: string
           operating_address: string | null
           reason_for_joining: string | null
           registration_number: string | null
+          rejection_reason: string | null
+          social_links: Json | null
+          tagline: string | null
           tin_number: string | null
           trust_level: string | null
           updated_at: string | null
           verification_stage: string | null
           website: string | null
+          whatsapp_enabled: boolean | null
         }
         Insert: {
           admin_notes?: string | null
@@ -178,24 +185,31 @@ export type Database = {
           created_at?: string | null
           created_by: string
           date_of_incorporation?: string | null
+          default_contact_email?: string | null
           description?: string | null
           director_id_types?: string[] | null
           director_names?: string[] | null
+          hiring_banner_url?: string | null
           id?: string
           industry?: string | null
           is_approved?: boolean | null
           is_suspended?: boolean | null
+          is_visible?: boolean | null
           location?: string | null
           logo_url?: string | null
           name: string
           operating_address?: string | null
           reason_for_joining?: string | null
           registration_number?: string | null
+          rejection_reason?: string | null
+          social_links?: Json | null
+          tagline?: string | null
           tin_number?: string | null
           trust_level?: string | null
           updated_at?: string | null
           verification_stage?: string | null
           website?: string | null
+          whatsapp_enabled?: boolean | null
         }
         Update: {
           admin_notes?: string | null
@@ -209,24 +223,31 @@ export type Database = {
           created_at?: string | null
           created_by?: string
           date_of_incorporation?: string | null
+          default_contact_email?: string | null
           description?: string | null
           director_id_types?: string[] | null
           director_names?: string[] | null
+          hiring_banner_url?: string | null
           id?: string
           industry?: string | null
           is_approved?: boolean | null
           is_suspended?: boolean | null
+          is_visible?: boolean | null
           location?: string | null
           logo_url?: string | null
           name?: string
           operating_address?: string | null
           reason_for_joining?: string | null
           registration_number?: string | null
+          rejection_reason?: string | null
+          social_links?: Json | null
+          tagline?: string | null
           tin_number?: string | null
           trust_level?: string | null
           updated_at?: string | null
           verification_stage?: string | null
           website?: string | null
+          whatsapp_enabled?: boolean | null
         }
         Relationships: []
       }
@@ -398,6 +419,7 @@ export type Database = {
           cv_url: string | null
           id: string
           job_id: string
+          question_answers: Json | null
           status: string | null
           updated_at: string | null
         }
@@ -408,6 +430,7 @@ export type Database = {
           cv_url?: string | null
           id?: string
           job_id: string
+          question_answers?: Json | null
           status?: string | null
           updated_at?: string | null
         }
@@ -418,6 +441,7 @@ export type Database = {
           cv_url?: string | null
           id?: string
           job_id?: string
+          question_answers?: Json | null
           status?: string | null
           updated_at?: string | null
         }
@@ -460,6 +484,7 @@ export type Database = {
           company_id: string | null
           created_at: string | null
           created_by: string
+          custom_questions: Json | null
           deadline: string | null
           description: string
           id: string
@@ -480,6 +505,7 @@ export type Database = {
           company_id?: string | null
           created_at?: string | null
           created_by: string
+          custom_questions?: Json | null
           deadline?: string | null
           description?: string
           id?: string
@@ -500,6 +526,7 @@ export type Database = {
           company_id?: string | null
           created_at?: string | null
           created_by?: string
+          custom_questions?: Json | null
           deadline?: string | null
           description?: string
           id?: string

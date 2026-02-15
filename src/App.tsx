@@ -15,6 +15,7 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import CompanyRegisterPage from "./pages/CompanyRegisterPage";
 import PostJobPage from "./pages/PostJobPage";
+import CompanyDashboard from "./pages/CompanyDashboard";
 import NotFound from "./pages/NotFound";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -71,6 +72,7 @@ const AppRoutes = () => {
       <Route path="/applications" element={<ProtectedRoute><AppLayout><ApplicationsPage /></AppLayout></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><AppLayout><ProfilePage /></AppLayout></ProtectedRoute>} />
       <Route path="/company/register" element={<ProtectedRoute><CompanyRegisterPage /></ProtectedRoute>} />
+      <Route path="/company/dashboard" element={<ProtectedRoute><CompanyDashboard /></ProtectedRoute>} />
       <Route path="/post-job" element={<ProtectedRoute><PostJobPage /></ProtectedRoute>} />
 
       {/* Admin routes */}
